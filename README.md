@@ -1,30 +1,36 @@
-# graphql - talk
+# graphql-talk
 
 ## Query
 
 ```gql
-query ($filter: BooksFilterInput, $sort: BooksSortInput){
-  books (filter: $filter, sort: $sort) {
+
+query ($filter: BooksFilterInput, $sort: BooksSortInput) {
+
+  books {
+    id
+    title
+  }
+
+  book (id: 1210) {
+    id
+    title
+  }
+
+  filteredBooks: books (filter: $filter, sort: $sort) {
     id,
     title,
     pubdate,
-    authors: {
-      id,
-      name
-    }
-    publishers {
+    authors {
       id,
       name
     }
   }
-  authors: {
-    id,
+
+  pubs: publishers {
+  	id,
     name
   }
-  publishers {
-    id,
-    name
-  }
+
 }
 
 ```
