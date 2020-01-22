@@ -35,7 +35,7 @@ query ($filter: BooksFilterInput, $sort: BooksSortInput) {
 
 ```
 
-## params
+### params
 ```
 {
   "filter": {
@@ -47,7 +47,7 @@ query ($filter: BooksFilterInput, $sort: BooksSortInput) {
 }
 ```
 
-# Mutation
+## Mutation
 ```gql
 mutation ($id: ID!, $data: AuthorInput) {
   updateBook (id: $id, data: $data) {
@@ -56,7 +56,7 @@ mutation ($id: ID!, $data: AuthorInput) {
 }
 ```
 
-## params
+### params
 ```
 {
   "id": 1,
