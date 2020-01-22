@@ -8,6 +8,14 @@ query ($filter: BooksFilterInput, $sort: BooksSortInput){
     id,
     title,
     pubdate,
+    authors: {
+      id,
+      name
+    }
+    publishers {
+      id,
+      name
+    }
   }
   authors: {
     id,
@@ -47,7 +55,7 @@ mutation ($id: ID!, $data: AuthorInput) {
 {
   "id": 1,
   "data": {
-    "title": "Abraham Merritt"
+    "title": "CremaWeb"
   }
 }
 ```

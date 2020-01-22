@@ -60,10 +60,11 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    books: async (root, args = {}, context) => {
+    books: async (root, args, context) => {
       const { filter = {}, sort = {} } = args
 
       let query = db.select().from('books')
+        .limit(5)
         // .where('title', 'like', '%Harry%').offset(1).limit(1)
 
       if (filter.title) query.where('title', 'like', `${filter.title}%` )
@@ -81,6 +82,7 @@ const resolvers = {
     },
     authors: async (root, args, context) => {
       let query = db.select().from('authors')
+        .limit(5)
         // .where('name', 'like', '%Rowling%').limit(1)
 
 
@@ -88,7 +90,8 @@ const resolvers = {
       return await query
     },
     publishers: async (root, args, context) => {
-      let query = db.select().from('publishers').limit(5)
+      let query = db.select().from('publishers')
+        .limit(5)
       // .offset(3).limit(1)
 
       console.log(query.toString())
@@ -97,34 +100,33 @@ const resolvers = {
   },
   Book: {
     authors: async (root, args, context) => {
-      return db.raw(`
-        select authors.*
-        from books_authors_link
-        left join authors on books_authors_link.author = authors.id
-        where books_authors_link.book = ?
-      `, root.id)
+      return db.select('authors.*')
+        .from('books_authors_link')
+        .leftJoin('authors', 'books_authors_link.author', 'authors.id')
+        .where('books_authors_link.book', '=', root.id)
     },
     publishers: async (root, args, context) => {
-      return db.raw(`
-      select publishers.*
-      from books_publishers_link
-      left join publishers on books_publishers_link.publisher = publishers.id
-      where books_publishers_link.book = ?
-    `, root.id)
-
+      return db.select('publishers.*')
+        .from('books_publishers_link')
+        .leftJoin('publishers', 'books_publishers_link.publisher', 'publishers.id')
+        .where('books_publishers_link.book', '=', root.id)
     }
   },
   Mutation: {
     updateBook: async (root, args, context) => {
-      console.log (args)
+      let query = db('authors').update(args.data)
+        .where('id', '=', args.id)
+      console.log (query.toString())
+
       return {
         id: 1,
         title: "asd",
       }
-      // return db.raw('update authors set name = ? where id = ?', args.name, args.id)
+
+      // return await query
     }
   }
-};
+}
 
 const server = new ApolloServer({
   graphqlPath: '/graphql',
