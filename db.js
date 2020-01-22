@@ -1,4 +1,4 @@
-var db = require('knex')({
+const db = require('knex')({
   client: 'sqlite3',
   connection: {
     filename: './books.sqlite'
